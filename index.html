@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My English Diary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Gochi+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7FAFF;--line:#DAE5F5;--margin:#EBA3AC;--ink:#1D2940;--muted:#5A6680;
+  --card:#FFFFFF;--edge:#C7D3E6;--red:#C62828;--bind:#C8102E;--green:#1E8A50;
+  --okbg:#E1F3E8;--badbg:#FCE5E5;--pencil:#E9A800;--sel:#FFF1BF;
+  --font:"Andika","Comic Sans MS","Trebuchet MS",system-ui,sans-serif;
+  --hand:"Gochi Hand","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#172033;--line:#243049;--margin:#6B3A45;--ink:#EAF0FA;--muted:#A5B1CA;
+  --card:#1F2A40;--edge:#34425F;--red:#FF7474;--bind:#E23B52;--green:#52C98E;
+  --okbg:#1C3A2D;--badbg:#3D2330;--pencil:#F5C542;--sel:#3B3620;}}
+:root[data-theme="dark"]{
+  --paper:#172033;--line:#243049;--margin:#6B3A45;--ink:#EAF0FA;--muted:#A5B1CA;
+  --card:#1F2A40;--edge:#34425F;--red:#FF7474;--bind:#E23B52;--green:#52C98E;
+  --okbg:#1C3A2D;--badbg:#3D2330;--pencil:#F5C542;--sel:#3B3620;}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;font-family:var(--font);font-size:18px;line-height:1.45;color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(90deg,transparent 0 26px,var(--margin) 26px 28px,transparent 28px),
+                   repeating-linear-gradient(180deg,transparent 0 35px,var(--line) 35px 36px);
+  border-left:8px solid var(--bind)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+.wrap{max-width:700px;margin:0 auto;padding:12px 16px 48px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.ghost{background:none;border:none;padding:8px 6px;color:var(--muted);font-size:1rem}
+h1{font-size:2.1rem;line-height:1.15;margin:.3em 0 .1em}
+h1 .who{font-family:var(--hand);color:var(--bind);font-weight:400;font-size:2.5rem}
+h2{font-size:1.5rem;margin:.2em 0}
+h3{font-size:1.15rem;margin:1.2em 0 .4em}
+.sub{color:var(--muted);margin:.2em 0 1em}
+.de-s{display:block;font-size:.9rem}
+.center{text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--card);border:2px solid var(--edge);border-radius:16px;padding:14px 8px}
+.tile .ic{font-size:2.3rem;line-height:1}
+.tile .nm{font-weight:700;text-align:center;line-height:1.2}
+.on{color:var(--pencil)} .off{color:var(--edge)}
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.mode{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--edge);border-radius:14px;padding:12px}
+.mode .mi{font-size:1.8rem}
+.mode small{display:block;color:var(--muted);font-size:.85rem;font-weight:400}
+.mode.learn{border-color:var(--pencil)}
+.mode.test{border-color:var(--bind)}
+.btn{background:var(--bind);color:#fff;border:none;border-radius:999px;padding:.6em 1.3em;font-weight:700}
+.btn.alt{background:var(--card);color:var(--ink);border:2px solid var(--edge)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
+.pbar{height:10px;background:var(--line);border-radius:6px;position:relative;margin:16px 6px 2px}
+.pbar i{position:absolute;inset:0 auto 0 0;background:var(--pencil);border-radius:6px;transition:width .3s}
+.pbar b{position:absolute;top:-17px;font-size:1.3rem;transform:translateX(-40%);transition:left .3s}
+.count{color:var(--muted);font-size:.9rem;margin:4px 0 0;text-align:right}
+.prompt{text-align:center;margin:14px 0 18px}
+.big{font-size:5rem;line-height:1.15}
+.emo{display:inline-block}
+.swatch{display:inline-block;width:1em;height:1em;border-radius:50%;border:2px solid var(--edge);vertical-align:middle}
+.num{font-weight:700;font-variant-numeric:lining-nums}
+.de{font-size:1.4rem;font-weight:700}
+.big .de{font-size:2rem}
+.word{font-size:2.2rem;font-weight:700}
+.gapline{font-size:1.45rem;line-height:1.6}
+.gapline .emo{font-size:2.4rem;vertical-align:middle;margin-right:6px}
+.blank{display:inline-block;min-width:4.5em;border-bottom:3px dashed var(--muted);font-family:var(--hand);font-size:1.7rem;line-height:1}
+.blank.ok{color:var(--green);border-color:var(--green)} .blank.bad{color:var(--red);border-color:var(--red)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{min-height:62px;font-size:1.25rem;background:var(--card);border:2px solid var(--edge);border-radius:14px;padding:8px}
+.opt.pic{font-size:2.8rem;min-height:96px;line-height:1.1}
+.opt.pic .de{font-size:1.1rem}
+.opt.ok{background:var(--okbg);border-color:var(--green)}
+.opt.bad{background:var(--badbg);border-color:var(--red)}
+.opt:disabled{cursor:default}
+.spk{background:var(--card);border:2px solid var(--edge);border-radius:999px;padding:6px 14px;font-size:1.1rem}
+.spk.huge{font-size:3rem;padding:18px 30px}
+.fb{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:64px}
+.stamp{font-family:var(--hand);font-size:2.2rem;line-height:1;color:var(--green);display:inline-block;transform:rotate(-6deg)}
+.stamp.bad{color:var(--red)}
+.corr{font-size:1.15rem}
+.corr .emo,.corr .swatch,.corr .num{font-size:1.6rem;vertical-align:middle}
+.slots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+.slot{width:40px;height:52px;border:none;border-bottom:3px dashed var(--muted);background:transparent;font-family:var(--hand);font-size:2rem;line-height:52px;text-align:center;padding:0}
+.slot.fixed{color:var(--muted);border-bottom-style:solid}
+.slot.space{border:none;width:18px}
+.slots.ok .slot{color:var(--green);border-color:var(--green)}
+.slots.bad .slot{color:var(--red);border-color:var(--red)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.tl{width:50px;height:50px;border-radius:12px;border:2px solid var(--edge);background:var(--card);font-size:1.5rem;font-weight:700}
+.tl:disabled{opacity:.25}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px}
+.col{display:flex;flex-direction:column;gap:10px}
+.m{min-height:66px;background:var(--card);border:2px solid var(--edge);border-radius:14px;padding:6px 8px;font-size:1.15rem}
+.m.l{font-size:2.3rem;line-height:1.1}
+.m.l .de{font-size:1.05rem}
+.m.sel{background:var(--sel);border-color:var(--pencil)}
+.m.done{background:var(--okbg);border-color:var(--green);opacity:.7}
+.hints{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 14px}
+.hint{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:2px dashed var(--edge);border-radius:999px;font-size:1.5rem;min-height:44px}
+.hint .de{font-size:.95rem}
+.hint small{font-size:1rem;font-weight:700;color:var(--green)}
+.hint.got{border-style:solid;border-color:var(--green);background:var(--okbg)}
+.snake{display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+.sl{width:34px;height:44px;border:1px solid var(--edge);background:var(--card);border-radius:7px;font-size:1.35rem;padding:0}
+.sl.start{background:var(--sel);border-color:var(--pencil);outline:2px solid var(--pencil)}
+.sl.found{background:var(--okbg);border-color:var(--green);color:var(--green);font-weight:700}
+.sl.show{background:var(--badbg);border-color:var(--red)}
+.faces{display:flex;border:2px solid var(--ink);border-radius:10px;overflow:hidden;margin:6px 0 14px}
+.face{flex:1;text-align:center;font-size:2rem;padding:8px 0;border-right:2px solid var(--ink);opacity:.28}
+.face:last-child{border-right:none}
+.face.on{opacity:1;background:var(--sel)}
+.score{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:1.15rem;margin:.4em 0}
+.bigst{font-size:2rem;margin:.2em 0}
+.practise{display:flex;flex-direction:column}
+.pl,.vw{display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;border-bottom:2px dashed var(--edge);padding:10px 4px;font-size:1.1rem}
+.pl .emo,.pl .swatch,.pl .num,.vw .vv{font-size:1.8rem;min-width:1.4em;text-align:center}
+.pl b{font-family:var(--hand);color:var(--red);font-size:1.6rem;font-weight:400}
+.vw b{font-size:1.25rem}
+.muted{color:var(--muted)}
+.vw small{display:block;color:var(--muted);font-size:.9rem}
+.grow{flex:1}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}.pbar i,.pbar b{transition:none}}
+@media (max-width:420px){.wrap{padding-left:36px;padding-right:10px}.big{font-size:4.2rem}.sl{width:30px;height:40px;font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const app=$('#app');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- vocabulary from the workbook ---------- */
+function parse(str){return str.split(';').map(x=>{const[en,de,e,g]=x.split('|');const w={en,de,g:g||'a'};if(e){if(e[0]==='#')w.c=e;else w.e=e}return w})}
+function gp(str){return str.split(';').map(x=>{const[t,a,clue]=x.split('|');return{t,a,clue:clue||''}})}
+const SYN={mum:'mother',mother:'mum',dad:'father',father:'dad',grandma:'grandmother',grandmother:'grandma',grandpa:'grandfather',grandfather:'grandpa'};
+const EN=['one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const DE=['eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn','zwanzig'];
+const DEU=['ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun'];
+const NUMS=[];
+for(let i=1;i<=30;i++){let en,de;if(i<=20){en=EN[i-1];de=DE[i-1]}else if(i<30){en='twenty-'+EN[i-21];de=DEU[i-21]+'undzwanzig'}else{en='thirty';de='dreißig'}NUMS.push({en,de,n:i,g:'a'})}
+function numGaps(){const g=[];for(let k=0;k<12;k++){const t=Math.random();
+  if(t<.5){const a=1+Math.floor(Math.random()*15),b=1+Math.floor(Math.random()*15);g.push({t:`${a} + ${b} = ___`,a:NUMS[a+b-1].en,clue:'➕'})}
+  else if(t<.8){const n=1+Math.floor(Math.random()*29);g.push({t:`What comes after ${n}? ___`,a:NUMS[n].en,clue:'➡️'})}
+  else{const n=2+Math.floor(Math.random()*29);g.push({t:`What comes before ${n}? ___`,a:NUMS[n-2].en,clue:'⬅️'})}}return g}
+const SOUNDS={cow:'Moo! Moo!',horse:'Neigh! Neigh!',sheep:'Baa! Baa!',pig:'Oink! Oink!',hen:'Cluck! Cluck!',cock:'Cock-a-doodle-doo!',goose:'Honk! Honk!',donkey:'Hee-haw!'};
+
+const TOPICS=[
+{id:'weather',name:'Weather & seasons',icon:'🌦️',
+ words:parse(`sunny|sonnig|☀️|w;rainy|regnerisch|🌧️|w;cloudy|bewölkt|☁️|w;windy|windig|💨|w;stormy|stürmisch|🌪️|w;foggy|neblig|🌫️|w;snowy|verschneit|🌨️|w;spring|Frühling|🌷|s;summer|Sommer|🏖️|s;autumn|Herbst|🍂|s;winter|Winter|⛄|s`),
+ gaps:gp(`Today it is ___.|sunny|☀️;In Berlin it's ___.|sunny|☀️;In Düsseldorf it's ___.|rainy|🌧️;In Hamburg it's ___.|foggy|🌫️;In München it's ___.|snowy|🌨️;In Bremen it's ___.|windy|💨;In Thüringen it's ___.|stormy|🌪️;In Sachsen it's ___.|cloudy|☁️;It's hot. We go to the beach in ___.|summer|🏖️;The leaves are brown and orange in ___.|autumn|🍂;We build a snowman in ___.|winter|⛄;Flowers grow in ___.|spring|🌷;Take your umbrella! It's ___.|rainy|☂️;I can't see the houses. It's ___.|foggy|🌫️`)},
+{id:'numbers',name:'Numbers 1–30',icon:'🔢',words:NUMS,gaps:numGaps},
+{id:'colours',name:'Colours',icon:'🎨',
+ words:parse(`red|rot|#E53935;yellow|gelb|#FDD835;orange|orange|#FB8C00;pink|rosa|#F48FB1;purple|lila|#8E24AA;blue|blau|#1E88E5;green|grün|#43A047;brown|braun|#795548;grey|grau|#9E9E9E;black|schwarz|#212121;white|weiß|#FFFFFF`),
+ gaps:gp(`The pig is ___.|pink|🐖;The donkey is ___.|grey|🫏;The cow is ___ and white.|black|🐄;The hen is ___.|brown|🐔;A banana is ___.|yellow|🍌;The sky is ___.|blue|🌤️;Grass is ___.|green|🌱;Snow is ___.|white|❄️;A tomato is ___.|red|🍅;An orange is ___.|orange|🍊;Grapes can be ___.|purple|🍇;Chocolate is ___.|brown|🍫`)},
+{id:'farm',name:'Farm animals',icon:'🐄',sound:true,
+ words:parse(`cow|Kuh|🐄;horse|Pferd|🐴;sheep|Schaf|🐑;pig|Schwein|🐖;hen|Henne / Huhn|🐔;cock|Hahn|🐓;goose|Gans|🪿;donkey|Esel|🫏`),
+ gaps:Object.entries(SOUNDS).map(([a,s])=>({t:`The ___ goes „${s}“`,a,clue:''})).concat(gp(`The ___ gives us milk.|cow|🥛;The ___ gives us eggs.|hen|🥚;The ___ gives us wool.|sheep|🧶;The ___ is pink and likes mud.|pig|;My favourite farm animal is a ___.|horse|🐴`))},
+{id:'pets',name:'Pets',icon:'🐶',
+ words:parse(`dog|Hund|🐶;cat|Katze|🐱;mouse|Maus|🐭;hamster|Hamster|🐹;fish|Fisch|🐟;turtle|Schildkröte|🐢;parrot|Papagei|🦜;budgie|Wellensittich|🐦;guinea pig|Meerschweinchen|`),
+ gaps:gp(`My favourite pet is a ___.|dog|🐶;A ___ says „Woof!“|dog|;A ___ says „Meow!“|cat|;A ___ can swim in water.|fish|💧;A ___ has got a hard shell.|turtle|;A ___ likes cheese.|mouse|🧀;A ___ is a big colourful bird. It can talk!|parrot|;A ___ is a small bird. It is often blue or green.|budgie|;My ___ runs in a little wheel.|hamster|🎡;A ___ is not a pig! It is a small furry pet.|guinea pig|`)},
+{id:'fruits',name:'Fruits',icon:'🍓',
+ words:parse(`cherry|Kirsche|🍒;banana|Banane|🍌;lemon|Zitrone|🍋;pear|Birne|🍐;apple|Apfel|🍎;watermelon|Wassermelone|🍉;plum|Pflaume|;strawberry|Erdbeere|🍓;grapes|Weintrauben|🍇;orange|Orange|🍊;pineapple|Ananas|🍍`),
+ gaps:gp(`A ___ is yellow and long. Monkeys love it.|banana|🐒;A ___ is yellow and sour.|lemon|😖;A ___ is green outside and red inside.|watermelon|;A ___ is small and red. It grows on a tree.|cherry|;An ___ a day keeps the doctor away.|apple|🩺;A ___ is red and has little seeds outside.|strawberry|;___ are small and green or purple.|grapes|;A ___ has got a green crown.|pineapple|👑;An ___ is orange and round.|orange|;A ___ is small and purple.|plum|;A ___ is green or yellow. It looks like a bell.|pear|🔔`)},
+{id:'veg',name:'Vegetables',icon:'🥕',
+ words:parse(`peas|Erbsen|🫛;potato|Kartoffel|🥔;lettuce|Salat|🥬;carrot|Karotte / Möhre|🥕;aubergine|Aubergine|🍆;tomato|Tomate|🍅;pepper|Paprika|🫑;cucumber|Gurke|🥒;radish|Radieschen|;bean|Bohne|🫘`),
+ gaps:gp(`Rabbits love a ___.|carrot|🐰;A ___ is long and green.|cucumber|;We make chips from a ___.|potato|🍟;We make ketchup from a ___.|tomato|🥫;___ are small, round and green.|peas|;An ___ is purple and long.|aubergine|;A ___ is small, red and round. It tastes hot.|radish|;We make a green salad from ___.|lettuce|🥗;A ___ can be red, yellow or green.|pepper|;A ___ is small. It looks like a kidney.|bean|`)},
+{id:'family',name:'Family',icon:'👨‍👩‍👧',
+ words:parse(`mum|Mama|👩;dad|Papa|👨;baby|Baby|👶;brother|Bruder|👦;sister|Schwester|👧;grandma|Oma|👵;grandpa|Opa|👴;aunt|Tante|;uncle|Onkel|;mother|Mutter|;father|Vater|;grandmother|Großmutter|;grandfather|Großvater|`),
+ gaps:gp(`My mum's mum is my ___.|grandma|;My dad's dad is my ___.|grandpa|;My mum's sister is my ___.|aunt|;My dad's brother is my ___.|uncle|;She is a girl. She is my ___.|sister|👧;He is a boy. He is my ___.|brother|👦;The ___ is very small. It can't walk.|baby|👶;My ___ is married to my mum.|dad|;My ___ is married to my dad.|mum|;I have got a ___. I have got two sisters.|mother|`)},
+{id:'body',name:'My body',icon:'🖐️',
+ words:parse(`eye|Auge|👁️;hand|Hand|✋;ear|Ohr|👂;mouth|Mund|👄;nose|Nase|👃;leg|Bein|🦵;knee|Knie|;foot|Fuß|🦶;toe|Zeh|;arm|Arm|💪;finger|Finger|☝️;thumb|Daumen|👍;head|Kopf|;hair|Haare|;tummy|Bauch|`),
+ gaps:gp(`My ___ hurts.|leg|🦵;My ___ hurts.|head|🤕;I close one ___ and wink.|eye|😉;I hear music with my ___.|ear|🎵;I eat with my ___.|mouth|🍽️;I smell flowers with my ___.|nose|🌸;I have got five fingers on my ___.|hand|;I kick the ball with my ___.|foot|⚽;My big ___ is on my foot.|toe|;My ___ hurts. I ate too much cake!|tummy|🍰;I bend my ___ when I sit down.|knee|;I brush my ___.|hair|`)},
+{id:'school',name:'School things',icon:'🎒',
+ words:parse(`pen|Füller / Kuli|🖊️;pencil|Bleistift|✏️;glue|Kleber|;book|Buch|📕;pencil case|Federmäppchen|;sharpener|Anspitzer|;schoolbag|Schulranzen|🎒;felt tip|Filzstift|;scissors|Schere|✂️;rubber|Radiergummi|;ruler|Lineal|📏`),
+ gaps:gp(`I write with a ___.|pen|🖊️;I cut paper with ___.|scissors|;I stick paper with ___.|glue|;I make my pencil sharp with a ___.|sharpener|;My pencils are in my ___.|pencil case|;I draw a straight line with a ___.|ruler|;A ___ takes away pencil mistakes.|rubber|;I read a ___.|book|📖;In my schoolbag there is a ___.|ruler|📏;I colour my picture with a ___.|felt tip|🎨;I carry my books in my ___.|schoolbag|`)},
+{id:'clothes',name:'Clothes',icon:'👕',
+ words:parse(`dress|Kleid|👗;jumper|Pullover|;jeans|Jeans|👖;hat|Hut|👒;cap|Kappe / Mütze|🧢;T-shirt|T-Shirt|👕;jacket|Jacke|🧥;socks|Socken|🧦;shoes|Schuhe|👞;trainers|Turnschuhe|👟;sunglasses|Sonnenbrille|🕶️`),
+ gaps:gp(`It's sunny. I wear my ___.|sunglasses|😎;It's cold. I wear my ___.|jacket|🥶;I play football in my ___.|trainers|⚽;I wear ___ on my feet, inside my shoes.|socks|;In my suitcase there is a ___.|dress|👗;My ___ are blue trousers.|jeans|;I wear a ___ on my head for baseball.|cap|⚾;It's summer. I wear a ___.|T-shirt|;It's winter. I wear a warm ___.|jumper|❄️;Grandma has got a big ___ with flowers.|hat|`)},
+{id:'home',name:'At home',icon:'🏠',
+ words:parse(`sofa|Sofa|🛋️;bed|Bett|🛏️;chair|Stuhl|🪑;table|Tisch|;cupboard|Schrank|;carpet|Teppich|;curtains|Vorhänge|;telephone|Telefon|☎️;television|Fernseher|📺;lamp|Lampe|💡`),
+ gaps:gp(`There is a ___ in the living room.|sofa|🛋️;I sleep in my ___.|bed|😴;I watch cartoons on the ___.|television|;I sit on a ___.|chair|;We eat dinner at the ___.|table|🍽️;My clothes are in the ___.|cupboard|;The ___ is on the floor.|carpet|;I close the ___ at night.|curtains|🌙;I call Grandma on the ___.|telephone|;The ___ gives light.|lamp|`)}
+];
+
+/* ---------- storage & speech ---------- */
+const KEY='kids-english-v1';
+let store={};try{store=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){store={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+let soundOn=store.sound!==false;
+let voice=null;
+function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t,force){if((!soundOn&&!force)||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'en-GB';if(voice)u.voice=voice;u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+
+/* ---------- helpers ---------- */
+const hasVis=w=>!!(w.e||w.c||w.n);
+function vis(w){if(w.c)return`<span class="swatch" style="background:${w.c}"></span>`;if(w.n)return`<span class="num">${w.n}</span>`;if(w.e)return`<span class="emo">${w.e}</span>`;return`<span class="de">„${esc(w.de)}“</span>`}
+const stars=n=>`<span class="on">${'★'.repeat(n)}</span><span class="off">${'☆'.repeat(3-n)}</span>`;
+function distract(T,w,n,onlyVis){
+  const ok=x=>x.en!==w.en&&SYN[w.en]!==x.en&&(!onlyVis||hasVis(x));
+  let c=T.words.filter(x=>ok(x)&&x.g===w.g);
+  if(w.n){c.sort((a,b)=>Math.abs(a.n-w.n)-Math.abs(b.n-w.n));c=c.slice(0,6)}
+  c=shuffle(c);
+  if(c.length<n)c=c.concat(shuffle(T.words.filter(x=>ok(x)&&!c.includes(x))));
+  return c.slice(0,n)}
+function pickN(arr,n){let out=[];while(out.length<n&&arr.length)out=out.concat(shuffle(arr));return out.slice(0,n)}
+const findW=(T,en)=>T.words.find(x=>x.en===en)||{en,de:'',g:'a'};
+const getGaps=T=>typeof T.gaps==='function'?T.gaps():T.gaps;
+const PRAISE=['Super!','Great!','Well done!','Yes!','Brilliant!','Perfect!','Fantastic!'];
+let cur=null,S=null;
+
+function frame(inner,back,backFn){
+  document.onkeydown=null;
+  if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch(e){}
+  app.innerHTML=`<div class="wrap"><div class="top">${back?`<button class="ghost" id="back">← ${esc(back)}</button>`:'<span></span>'}<button class="ghost" id="snd" aria-label="Sound on or off">${soundOn?'🔊 Sound on':'🔇 Sound off'}</button></div>${inner}</div>`;
+  $('#snd').onclick=()=>{soundOn=!soundOn;store.sound=soundOn;save();$('#snd').textContent=soundOn?'🔊 Sound on':'🔇 Sound off'};
+  if(back)$('#back').onclick=backFn;
+  window.scrollTo(0,0)}
+
+/* ---------- screens ---------- */
+function home(){
+  frame(`<h1><span class="who">My</span><br>English Diary</h1><p class="sub">Pick a topic and practise.<span class="de-s">Wähle ein Thema aus deinem Englischheft.</span></p>
+  <div class="grid">${TOPICS.map((t,i)=>`<button class="tile" data-i="${i}"><span class="ic">${t.icon}</span><span class="nm">${t.name}</span><span>${stars(store['s_'+t.id]||0)}</span></button>`).join('')}</div>`);
+  $$('.tile').forEach(b=>b.onclick=()=>topic(TOPICS[+b.dataset.i]))}
+
+const MODES=[
+['learn','📖','Learn the words','Alle Wörter ansehen und anhören'],
+['quiz','🔤','Choose the word','Bild → englisches Wort'],
+['pic','🖼️','Find the picture','Wort → Bild'],
+['listen','🎧','Listen and tap','Hören und antippen'],
+['german','🇩🇪','German → English','Was heißt das auf Englisch?'],
+['spell','✏️','Write the word','Buchstaben legen'],
+['match','〰️','Draw a line','Paare verbinden'],
+['gap','📝','Fill the gap','Welches Wort fehlt?'],
+['snake','🔍','Find the words','Wörterschlange'],
+['test','🏆','Big test','Alles gemischt – 12 Fragen']];
+function topic(T){cur=T;
+  frame(`<h2>${T.icon} ${T.name}</h2><p class="sub">${T.words.length} words. Start with “Learn the words”, then try the games.</p>
+  <div class="modes">${MODES.map(m=>`<button class="mode ${m[0]}" data-m="${m[0]}"><span class="mi">${m[1]}</span><span><b>${m[2]}</b><small>${m[3]}</small></span></button>`).join('')}</div>`,'Topics',home);
+  $$('.mode').forEach(b=>b.onclick=()=>startMode(b.dataset.m))}
+
+function learn(){const T=cur;
+  frame(`<h2>📖 Learn the words</h2><p class="sub">Tap a word to hear it.<span class="de-s">Tippe auf ein Wort, um es zu hören.</span></p>
+  <div class="practise">${T.words.map((w,i)=>`<button class="vw" data-i="${i}"><span class="vv">${hasVis(w)?vis(w):'📘'}</span><span class="grow"><b>${esc(w.en)}</b>${T.sound?`<small>„${SOUNDS[w.en]}“</small>`:''}</span><span class="muted">${esc(w.de)}</span><span>🔊</span></button>`).join('')}</div>
+  <div class="row"><button class="btn" id="go">I'm ready – test me!</button></div>`,T.name,()=>topic(T));
+  $$('.vw').forEach(b=>b.onclick=()=>{const w=T.words[+b.dataset.i];say(T.sound?`The ${w.en} goes ${SOUNDS[w.en]}`:w.en,true)});
+  $('#go').onclick=()=>startMode('test')}
+
+function startMode(mode,list){const T=cur;
+  if(mode==='learn')return learn();
+  S={mode,items:[],i:0,res:[],list};
+  if(mode==='match')return startMatch();
+  if(mode==='snake')return startSnake();
+  const mk=(type,x)=>{
+    if(type==='gap'){const w=findW(T,x.a);return{type,g:x,w,opts:shuffle([w,...distract(T,w,2)])}}
+    const q={type,w:x};
+    if(type==='quiz'||type==='german')q.opts=shuffle([x,...distract(T,x,3)]);
+    if(type==='pic'||type==='listen')q.opts=shuffle([x,...distract(T,x,3,true)]);
+    return q};
+  if(list){list.forEach(w=>{S.items.push(mk(hasVis(w)?'quiz':'german',w));S.items.push(mk('spell',w))});S.items=shuffle(S.items)}
+  else if(mode==='gap'){S.items=pickN(getGaps(T),8).map(g=>mk('gap',g))}
+  else if(mode==='test'){const gaps=shuffle(getGaps(T));const types=['quiz','german','gap','spell','listen','pic'];
+    S.items=shuffle(pickN(T.words,12).map((w,k)=>{let t=types[k%types.length];
+      if(t==='gap')return gaps.length?mk('gap',gaps.pop()):mk('spell',w);
+      if((t==='quiz'||t==='pic'||t==='listen')&&!hasVis(w))t='german';return mk(t,w)}))}
+  else{const pool=(mode==='quiz'||mode==='pic'||mode==='listen')?T.words.filter(hasVis):T.words;S.items=pickN(pool,8).map(w=>mk(mode,w))}
+  renderQ()}
+
+function qFrame(title,sub,body,done,total){
+  const n=total||S.items.length,i=done!==undefined?done:S.i,p=Math.min(100,i/n*100);
+  frame(`<h2>${title}</h2><p class="sub">${sub}</p><div class="pbar"><i style="width:${p}%"></i><b style="left:${p}%">✏️</b></div><p class="count">${Math.min(i+1,n)} / ${n}</p>${body}<div class="fb" id="fb" aria-live="polite"></div>`,cur.name,()=>topic(cur))}
+
+function optBtns(q,pics){return`<div class="opts">${q.opts.map((o,k)=>`<button class="opt ${pics?'pic':''}" data-k="${k}">${pics?vis(o):esc(o.en)}</button>`).join('')}</div>`}
+
+function renderQ(){
+  if(S.i>=S.items.length)return results();
+  const q=S.items[S.i];
+  if(q.type==='quiz'){qFrame('Choose the right word.','Welches Wort passt zum Bild?',`<div class="prompt big">${vis(q.w)}</div>${optBtns(q)}`)}
+  else if(q.type==='pic'){qFrame('Find the picture.','Tippe auf das richtige Bild.',`<div class="prompt"><span class="word">${esc(q.w.en)}</span> <button class="spk" id="spk" aria-label="Listen">🔊</button></div>${optBtns(q,true)}`)}
+  else if(q.type==='listen'){const pics=q.opts.every(hasVis);qFrame('Listen and tap.','Hör gut zu und tippe auf die richtige Antwort.',`<div class="prompt"><button class="spk huge" id="spk" aria-label="Play the word">🔊</button><p class="sub">Tap to hear it again</p></div>${optBtns(q,pics)}`);setTimeout(()=>say(q.w.en,true),350)}
+  else if(q.type==='german'){qFrame('What is it in English?','Wie heißt das Wort auf Englisch?',`<div class="prompt"><span class="word">„${esc(q.w.de)}“</span></div>${optBtns(q)}`)}
+  else if(q.type==='gap'){qFrame('Fill the gap.','Welches Wort fehlt im Satz?',`<div class="prompt gapline">${q.g.clue?`<span class="emo">${q.g.clue}</span>`:''}${esc(q.g.t).replace('___','<span class="blank" id="blank">&nbsp;</span>')}</div>${optBtns(q)}`)}
+  else if(q.type==='spell'){return renderSpell(q)}
+  const spk=$('#spk');if(spk)spk.onclick=()=>say(q.w.en,true);
+  $$('.opt').forEach(b=>b.onclick=()=>{
+    const o=q.opts[+b.dataset.k],ok=o.en===q.w.en;
+    $$('.opt').forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k].en===q.w.en)x.classList.add('ok')});
+    if(!ok)b.classList.add('bad','shake');
+    const bl=$('#blank');if(bl){bl.textContent=q.w.en;bl.classList.add(ok?'ok':'bad')}
+    feedback(ok,q.w)})}
+
+function feedback(ok,w,shown){if(shown===undefined)shown=ok;
+  S.res.push({w,ok});say(w.en);
+  const fb=$('#fb');
+  fb.innerHTML=(shown?`<span class="stamp">✓ ${ok?rnd(PRAISE):'Got it!'}</span>`:`<span class="stamp bad">Oops!</span><span class="corr">It's <b>${esc(w.en)}</b> ${hasVis(w)?vis(w):''}</span>`)+`<button class="btn" id="next">Next</button>`;
+  let done=false;const go=()=>{if(done||!fb.isConnected)return;done=true;S.i++;renderQ()};
+  const nx=$('#next');nx.onclick=go;nx.focus({preventScroll:true});
+  if(ok)setTimeout(go,1600)}
+
+/* ---------- spelling ---------- */
+function renderSpell(q){const w=q.w,chars=[...w.en];
+  const fixed=chars.map((c,i)=>i===0||c===' '||c==='-');
+  const need=chars.filter((c,i)=>!fixed[i]).map(c=>c.toLowerCase());
+  const dec=[];while(dec.length<2){const c=rnd([...'abdeghiklmnoprstuy']);if(!need.includes(c)&&!dec.includes(c))dec.push(c)}
+  const tiles=shuffle(need.concat(dec));
+  qFrame('Write the word.','Lege das Wort. Der erste Buchstabe ist schon da.',`<div class="prompt big">${vis(w)}</div><p class="center"><button class="spk" id="spk">🔊 Hear it</button></p>
+  <div class="slots" id="slots">${chars.map((c,i)=>fixed[i]?`<span class="slot fixed ${c===' '?'space':''}">${c===' '?'':esc(c)}</span>`:`<button class="slot" data-i="${i}" aria-label="letter ${i+1}"></button>`).join('')}</div>
+  <div class="tiles">${tiles.map((c,k)=>`<button class="tl" data-k="${k}">${c}</button>`).join('')}</div>
+  <p class="center"><button class="ghost" id="clr">Clear</button></p>`);
+  $('#spk').onclick=()=>say(w.en,true);
+  const fill={};let tries=0,locked=false;
+  const slotEls=$$('button.slot');
+  const clearAll=()=>{slotEls.forEach(s=>{s.textContent='';delete fill[s.dataset.i]});$$('.tl').forEach(t=>t.disabled=false);$('#slots').classList.remove('bad')};
+  const check=()=>{
+    const word=chars.map((c,i)=>fixed[i]?c:tiles[fill[i]]).join('');
+    if(word.toLowerCase()===w.en.toLowerCase()){locked=true;$('#slots').classList.add('ok');feedback(tries===0,w,true);return}
+    tries++;const sl=$('#slots');sl.classList.add('bad','shake');
+    if(tries<2){$('#fb').innerHTML='<span class="stamp bad">Try again!</span>';locked=true;setTimeout(()=>{sl.classList.remove('shake');clearAll();$('#fb').innerHTML='';locked=false},900)}
+    else{locked=true;slotEls.forEach(s=>s.textContent=chars[+s.dataset.i]);$$('.tl').forEach(t=>t.disabled=true);feedback(false,w)}};
+  const place=k=>{if(locked)return;const s=slotEls.find(s=>fill[s.dataset.i]===undefined);if(!s)return;
+    fill[s.dataset.i]=k;s.textContent=tiles[k];$(`.tl[data-k="${k}"]`).disabled=true;
+    if(slotEls.every(s=>fill[s.dataset.i]!==undefined))check()};
+  $$('.tl').forEach(t=>t.onclick=()=>place(+t.dataset.k));
+  slotEls.forEach(s=>s.onclick=()=>{if(locked)return;const k=fill[s.dataset.i];if(k===undefined)return;delete fill[s.dataset.i];s.textContent='';$(`.tl[data-k="${k}"]`).disabled=false});
+  $('#clr').onclick=()=>{if(!locked)clearAll()};
+  document.onkeydown=e=>{if(locked)return;const key=e.key.toLowerCase();
+    if(/^[a-z]$/.test(key)){const t=$$('.tl').find(t=>!t.disabled&&t.textContent===key);if(t)place(+t.dataset.k)}
+    else if(e.key==='Backspace'){const s=slotEls.filter(s=>fill[s.dataset.i]!==undefined).pop();if(s)s.click()}}}
+
+/* ---------- draw a line (matching) ---------- */
+function startMatch(){const T=cur;
+  const pool=T.sound?T.words.filter(w=>SOUNDS[w.en]):T.words;
+  const boards=[];for(let b=0;b<3;b++){const bd=[];for(const w of shuffle(pool)){if(bd.length>=4)break;if(bd.some(x=>SYN[x.en]===w.en))continue;bd.push(w)}boards.push(bd)}
+  S.boards=boards;S.bi=0;renderMatch()}
+function renderMatch(){const T=cur,b=S.boards[S.bi],L=shuffle(b),R=shuffle(b);
+  qFrame('Draw a line.','Finde die Paare: erst links tippen, dann rechts.',`<div class="match"><div class="col">${L.map(w=>`<button class="m l" data-en="${esc(w.en)}">${vis(w)}</button>`).join('')}</div><div class="col">${R.map(w=>`<button class="m r" data-en="${esc(w.en)}">${esc(T.sound?SOUNDS[w.en]:w.en)}</button>`).join('')}</div></div>`,S.bi,S.boards.length);
+  let sl=null,sr=null;const missed=new Set();let left=b.length;
+  const tryPair=()=>{if(!sl||!sr)return;const a=sl,c=sr;sl=sr=null;
+    if(a.dataset.en===c.dataset.en){[a,c].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});
+      const w=b.find(x=>x.en===a.dataset.en);S.res.push({w,ok:!missed.has(w.en)});say(T.sound?`${w.en}. ${SOUNDS[w.en]}`:w.en);
+      if(--left===0){$('#fb').innerHTML=`<span class="stamp">✓ ${rnd(PRAISE)}</span>`;setTimeout(()=>{if(!$('#fb'))return;S.bi++;S.bi<S.boards.length?renderMatch():results()},1100)}}
+    else{missed.add(a.dataset.en);[a,c].forEach(x=>{x.classList.remove('sel');x.classList.add('shake');setTimeout(()=>x.classList.remove('shake'),450)})}};
+  $$('.m.l').forEach(x=>x.onclick=()=>{$$('.m.l').forEach(y=>y.classList.remove('sel'));sl=x;x.classList.add('sel');tryPair()});
+  $$('.m.r').forEach(x=>x.onclick=()=>{$$('.m.r').forEach(y=>y.classList.remove('sel'));sr=x;x.classList.add('sel');tryPair()})}
+
+/* ---------- find the words (word snake) ---------- */
+const clean=w=>w.en.toLowerCase().replace(/[^a-z]/g,'');
+function startSnake(){const T=cur,max=T.id==='numbers'?6:7;let ws=[];
+  for(const w of shuffle(T.words)){if(ws.length>=max)break;if(ws.some(x=>SYN[x.en]===w.en))continue;ws.push(w)}
+  let pos=0;const off={};ws.forEach(w=>{off[w.en]=[pos,pos+clean(w).length-1];pos+=clean(w).length});
+  S.sn={ws,str:ws.map(clean).join(''),off,found:new Set(),start:null};renderSnake()}
+function renderSnake(){const T=cur,sn=S.sn;
+  frame(`<h2>Find the words and circle.</h2><p class="sub">Tippe auf den ersten und dann auf den letzten Buchstaben eines Wortes.</p>
+  <div class="hints">${sn.ws.map(w=>`<span class="hint" data-en="${esc(w.en)}">${vis(w)}</span>`).join('')}</div>
+  <div class="snake">${[...sn.str].map((c,i)=>`<button class="sl" data-i="${i}">${c}</button>`).join('')}</div>
+  <div class="fb" id="fb" aria-live="polite"></div><div class="row"><button class="ghost" id="give">Show me the rest</button></div>`,T.name,()=>topic(T));
+  const L=$$('.sl');
+  const mark=(w,cls)=>{const[a,b]=sn.off[w.en];for(let i=a;i<=b;i++)L[i].classList.add(cls);const h=$(`.hint[data-en="${CSS.escape(w.en)}"]`);if(h){h.classList.add('got');h.insertAdjacentHTML('beforeend',`<small>${esc(w.en)}</small>`)}};
+  const finish=()=>{$('#fb').innerHTML=`<span class="stamp">✓ ${rnd(PRAISE)}</span><button class="btn" id="next">See results</button>`;$('#next').onclick=results};
+  L.forEach(b=>b.onclick=()=>{const i=+b.dataset.i;
+    if(sn.start===null){sn.start=i;b.classList.add('start');return}
+    L[sn.start].classList.remove('start');
+    if(sn.start===i){sn.start=null;return}
+    const a=Math.min(sn.start,i),z=Math.max(sn.start,i);sn.start=null;
+    const sub=sn.str.slice(a,z+1);
+    const w=sn.ws.find(x=>!sn.found.has(x.en)&&clean(x)===sub);
+    if(w){sn.found.add(w.en);sn.off[w.en]=[a,z];mark(w,'found');S.res.push({w,ok:true});say(w.en);$('#fb').innerHTML='';
+      if(sn.found.size===sn.ws.length)finish()}
+    else{$('#fb').innerHTML='<span class="stamp bad">Not a word – try again!</span>';for(let k=a;k<=z;k++){L[k].classList.add('shake');setTimeout(()=>L[k].classList.remove('shake'),450)}}});
+  $('#give').onclick=()=>{sn.ws.filter(w=>!sn.found.has(w.en)).forEach(w=>{sn.found.add(w.en);mark(w,'show');S.res.push({w,ok:false})});$('#give').remove();finish()}}
+
+/* ---------- Rückmeldung (results) ---------- */
+function results(){const T=cur,r=S.res,n=r.length||1,okN=r.filter(x=>x.ok).length,p=Math.round(okN/n*100);
+  const lvl=p>=90?0:p>=75?1:p>=55?2:p>=35?3:4,st=p>=90?3:p>=70?2:p>=50?1:0;
+  const key='s_'+T.id;if(st>(store[key]||0)){store[key]=st;save()}
+  const missed=[];r.forEach(x=>{if(!x.ok&&!missed.some(m=>m.en===x.w.en))missed.push(x.w)});
+  const faces=['😄','🙂','😐','😕','🙁'];
+  const msg=['Excellent!','Very good!','Good work – keep going!','Nice try – practise a bit more.',"Let's practise these words again."];
+  const mode=S.mode,list=S.list;
+  frame(`<h2>Rückmeldung</h2><p class="sub">So hast du gearbeitet:</p>
+  <div class="faces">${faces.map((f,i)=>`<span class="face ${i===lvl?'on':''}">${f}</span>`).join('')}</div>
+  <div class="score"><span class="stamp ${lvl>2?'bad':''}">${okN} / ${r.length}</span><span>${msg[lvl]}</span></div>
+  <p class="bigst">${stars(st)}</p>
+  ${missed.length?`<h3>Das solltest du noch üben:</h3><div class="practise">${missed.map((w,i)=>`<button class="pl" data-i="${i}">${hasVis(w)?vis(w):'<span class="emo">📘</span>'}<b class="grow">${esc(w.en)}</b><span class="muted">${esc(w.de)}</span><span>🔊</span></button>`).join('')}</div>`:'<p>Every answer was right! 🎉</p>'}
+  <div class="row">${missed.length?'<button class="btn" id="prac">Practise these words</button>':''}<button class="btn alt" id="again">Play again</button><button class="ghost" id="other">Other games</button></div>`,T.name,()=>topic(T));
+  $$('.pl').forEach(b=>b.onclick=()=>say(missed[+b.dataset.i].en,true));
+  if(missed.length)$('#prac').onclick=()=>startMode('practice',missed);
+  $('#again').onclick=()=>startMode(mode,list);
+  $('#other').onclick=()=>topic(T)}
+
+home();
+</script>
+</body>
+</html>
